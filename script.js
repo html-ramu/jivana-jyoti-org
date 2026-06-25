@@ -215,9 +215,41 @@ track.addEventListener('mousemove', touchMove);
 track.addEventListener('mouseup', touchEnd);
 track.addEventListener('mouseleave', touchEnd);
 
-// Initialize carousel
+// Initialize carousel DOM without starting the auto-timer yet
 goToSlide(0);
-startAutoSlide();
+
+const introVideo = document.getElementById('introVideo');
+const introContainer = document.getElementById('introVideoContainer');
+
+function skipIntroAndStartCarousel() {
+  if (!introContainer) return;
+  // Trigger CSS fade out
+  introContainer.classList.add('fade-out');
+  
+  // Wait for the CSS transition to finish, then remove from DOM flow and start carousel
+  setTimeout(() => {
+    introContainer.style.display = 'none';
+    startAutoSlide();
+  }, 800); 
+}
+
+if (introVideo && introContainer) {
+  // Attempt to play the video. Catch browser autoplay restrictions to prevent freezing.
+  const playPromise = introVideo.play();
+  
+  if (playPromise !== undefined) {
+    playPromise.catch(error => {
+      console.warn("Autoplay blocked by browser. Skipping intro.", error);
+      skipIntroAndStartCarousel();
+    });
+  }
+
+  // When the video finishes naturally, fade out and start the carousel
+  introVideo.addEventListener('ended', skipIntroAndStartCarousel);
+} else {
+  // Fallback just in case the video elements are ever removed from the HTML
+  startAutoSlide();
+}
 
 /* ============================================
    ANIMATED STATS COUNTER

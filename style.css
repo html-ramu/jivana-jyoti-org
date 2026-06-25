@@ -437,6 +437,29 @@ button { cursor: pointer; border: none; background: none; font-family: var(--fon
 }
 
 /* ---------- CAROUSEL STYLES ---------- */
+/* ---------- INTRO VIDEO OVERLAY ---------- */
+.intro-video-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 20;
+  background: var(--text-dark);
+  transition: opacity 0.8s ease-in-out;
+}
+
+.intro-video-overlay video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.intro-video-overlay.fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
 .carousel-wrapper {
   position: relative;
   overflow: hidden;
